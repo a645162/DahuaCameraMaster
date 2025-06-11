@@ -1,0 +1,6 @@
+pyside6
+
+requests
+
+# Dahua Net SDK
+# NetSDK
