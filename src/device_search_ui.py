@@ -136,6 +136,12 @@ class Ui_DeviceSearchWindow(object):
         self.StopSearchButton.setMinimumHeight(40)
         self.operation_layout.addWidget(self.StopSearchButton)
 
+        # IP配置按钮
+        self.IPConfigButton = QtWidgets.QPushButton("网卡IP配置(Network Config)")
+        self.IPConfigButton.setMinimumHeight(40)
+        self.IPConfigButton.setStyleSheet("QPushButton { background-color: #e74c3c; color: white; font-weight: bold; border: none; border-radius: 3px; } QPushButton:hover { background-color: #c0392b; }")
+        self.operation_layout.addWidget(self.IPConfigButton)
+
         self.control_layout.addWidget(self.operation_groupBox)
 
         self.main_layout.addLayout(self.control_layout)

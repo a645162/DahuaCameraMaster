@@ -20,6 +20,7 @@ from device_search_ui import Ui_DeviceSearchWindow
 from init_device_dialog_ui import Ui_InitDeviceDialog
 from config_manager import ConfigManager
 from DahuaCamMain import DahuaCamWindow
+from ip_config_window import IPConfigWindow
 
 from NetSDK.NetSDK import NetClient
 
@@ -184,6 +185,7 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
         self.device_mac_list = []
         self.search_handles = []
         self.camera_windows = []  # 存储摄像机窗口
+        self.ip_config_window = None  # IP配置窗口
 
         # 创建设备更新线程
         self.update_thread = DeviceUpdateThread()
@@ -211,6 +213,7 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
         self.StopSearchButton.clicked.connect(self.stop_search)
         self.InitButton.clicked.connect(self.init_device)
         self.ConnectButton.clicked.connect(self.connect_device)
+        self.IPConfigButton.clicked.connect(self.open_ip_config)
 
     def get_local_ips(self) -> List[str]:
         """获取本地IP地址列表"""
@@ -541,6 +544,25 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
 
         self.statusbar.showMessage(f"已打开摄像机控制窗口: {ip}")
 
+    def open_ip_config(self):
+        """打开IP配置窗口"""
+        try:
+            # 如果窗口已存在且可见，则激活它
+            if self.ip_config_window and self.ip_config_window.isVisible():
+                self.ip_config_window.raise_()
+                self.ip_config_window.activateWindow()
+                return
+            
+            # 创建新的IP配置窗口
+            self.ip_config_window = IPConfigWindow(self)
+            self.ip_config_window.setWindowTitle("网卡IP配置工具")
+            self.ip_config_window.show()
+            
+            self.statusbar.showMessage("已打开网卡IP配置工具")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"打开IP配置工具失败: {str(e)}")
+
     def closeEvent(self, event):
         """关闭事件"""
         # 停止搜索
@@ -555,6 +577,10 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
         for window in self.camera_windows:
             if window:
                 window.close()
+
+        # 关闭IP配置窗口
+        if self.ip_config_window:
+            self.ip_config_window.close()
 
         # 清理SDK
         self.sdk.Cleanup()
