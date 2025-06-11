@@ -1,1 +1,4 @@
 https://support.dahuatech.com/sdkindex/sdkExploit
+
+试试拉流YUV转RGB(OpenCV)
+https://blog.csdn.net/weixin_52629177/article/details/136566834

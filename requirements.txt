@@ -4,3 +4,5 @@ requests
 
 # Dahua Net SDK
 # NetSDK
+
+# opencv-python
