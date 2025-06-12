@@ -317,10 +317,10 @@ class IPConfigWindow(QMainWindow, Ui_IPConfigWindow):
             f"默认网关: {self.gateway_lineEdit.text()}\n"
             f"DNS服务器: {self.dns_lineEdit.text()}\n\n"
             f"确定要应用这些设置吗？",
-            QMessageBox.Yes | QMessageBox.No
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         
         self.status_label.setText("正在配置网络设置...")
@@ -350,10 +350,10 @@ class IPConfigWindow(QMainWindow, Ui_IPConfigWindow):
             "确认恢复DHCP",
             f"即将为网卡 '{self.current_adapter['connection_id']}' 恢复DHCP自动获取IP地址。\n\n"
             f"确定要继续吗？",
-            QMessageBox.Yes | QMessageBox.No
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         
         self.status_label.setText("正在恢复DHCP设置...")

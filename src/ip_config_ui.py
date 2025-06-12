@@ -20,7 +20,7 @@ class Ui_IPConfigWindow(object):
 
         # 标题
         self.title_label = QtWidgets.QLabel("网卡IP配置工具")
-        self.title_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.title_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2c3e50; padding: 8px;")
         self.title_label.setMaximumHeight(35)
         self.main_layout.addWidget(self.title_label)
@@ -121,7 +121,7 @@ class Ui_IPConfigWindow(object):
 
         # 状态显示区域
         self.status_label = QtWidgets.QLabel("就绪")
-        self.status_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.status_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.status_label.setFixedHeight(25)
         self.status_label.setStyleSheet("color: #7f8c8d; font-style: italic; font-size: 11px; padding: 3px;")
         self.main_layout.addWidget(self.status_label)

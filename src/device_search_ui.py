@@ -50,7 +50,7 @@ class Ui_DeviceSearchWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(80)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.tableWidget.setAlternatingRowColors(True)
 
         self.devicelist_layout.addWidget(self.tableWidget)

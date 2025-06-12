@@ -68,7 +68,7 @@ class AspectRatioVideoWidget(QWidget):
         # 视频显示控件
         self.video_widget = QLabel()
         self.video_widget.setStyleSheet("background-color: rgb(180, 180, 180);")
-        self.video_widget.setAlignment(Qt.AlignCenter)
+        self.video_widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.video_widget.setText("视频显示区域")
         self.video_widget.setMinimumSize(self.min_width, self.min_height)
 
@@ -143,7 +143,7 @@ class AspectRatioVideoWidget(QWidget):
         else:
             self.size_label.setText("控件尺寸: 自适应模式")
 
-        print(f"自适应模式 - 视频控件尺寸跟随容器")
+        print("自适应模式 - 视频控件尺寸跟随容器")
 
     def resizeEvent(self, event):
         """尺寸改变事件"""
