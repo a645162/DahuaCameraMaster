@@ -1154,11 +1154,11 @@ class DahuaCamWindow(QMainWindow, Ui_MainWindow):
             self,
             "确认重启",
             "确定要重启设备吗？设备重启后需要重新连接。",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
         )
 
-        if reply == QMessageBox.Yes:
+        if reply == QMessageBox.StandardButton.Yes:
             try:
                 print("发送设备重启命令...")
                 result = self.sdk.RebootDev(self.loginID)

@@ -43,14 +43,14 @@ class Ui_InitDeviceDialog(object):
         self.password_label = QtWidgets.QLabel("密码(Password):")
         self.account_layout.addWidget(self.password_label, 1, 0)
         self.password_lineEdit = QtWidgets.QLineEdit()
-        self.password_lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.password_lineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.password_lineEdit.setPlaceholderText("请输入密码")
         self.account_layout.addWidget(self.password_lineEdit, 1, 1)
 
         self.confirm_password_label = QtWidgets.QLabel("确认密码(Confirm Password):")
         self.account_layout.addWidget(self.confirm_password_label, 2, 0)
         self.confirm_password_lineEdit = QtWidgets.QLineEdit()
-        self.confirm_password_lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.confirm_password_lineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.confirm_password_lineEdit.setPlaceholderText("请再次输入密码")
         self.account_layout.addWidget(self.confirm_password_lineEdit, 2, 1)
 

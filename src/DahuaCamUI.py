@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
 
         # 登录控制区域
         self.login_frame = QtWidgets.QFrame()
-        self.login_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.login_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.login_frame.setMaximumHeight(120)
         self.login_layout = QtWidgets.QGridLayout(self.login_frame)
 
@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.Pwd_label = QtWidgets.QLabel("密码(PWD)")
         self.login_layout.addWidget(self.Pwd_label, 1, 2)
         self.Pwd_lineEdit = QtWidgets.QLineEdit()
-        self.Pwd_lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.Pwd_lineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.Pwd_lineEdit.setText("admin123")
         self.login_layout.addWidget(self.Pwd_lineEdit, 1, 3)
 
@@ -438,7 +438,7 @@ class Ui_MainWindow(object):
         self.alarm_tableWidget.verticalHeader().setVisible(False)
         self.alarm_tableWidget.setAlternatingRowColors(True)
         self.alarm_tableWidget.setSelectionBehavior(
-            QtWidgets.QAbstractItemView.SelectRows
+            QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows
         )
         self.alarm_tableWidget.setMaximumHeight(200)
 

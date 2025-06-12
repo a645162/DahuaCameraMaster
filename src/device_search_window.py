@@ -429,7 +429,7 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
 
         # 显示初始化对话框
         dialog = InitDeviceDialog(device_info, self)
-        if dialog.exec() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             init_data = dialog.get_init_data()
 
             # 验证密码

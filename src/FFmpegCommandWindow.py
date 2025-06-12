@@ -3,7 +3,6 @@ import os
 import sys
 from datetime import datetime
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
-from PySide6.QtCore import QTimer
 
 from FFmpegCommandUI import Ui_FFmpegWindow
 
