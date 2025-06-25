@@ -3,10 +3,10 @@ DPI工具模块
 专门处理Windows DPI相关设置和配置
 """
 
-import sys
-import os
-import logging
 import ctypes
+import logging
+import os
+import sys
 from typing import Optional
 
 

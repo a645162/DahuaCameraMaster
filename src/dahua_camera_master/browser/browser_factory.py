@@ -4,11 +4,24 @@
 """
 
 import logging
-from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
+import os
+import sys
 
-from .ie_browser_window import IEBrowserWindow
-from ..utils.dpi_utils import set_dpi_awareness, setup_qt_dpi_settings
+# 添加src目录到Python路径，以便正确导入dahua_camera_master包
+if __name__ == "__main__":
+    # 获取当前文件的目录
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # 获取src目录（向上三级目录）
+    src_dir = os.path.join(current_dir, "..", "..", "..")
+    src_dir = os.path.abspath(src_dir)
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication
+
+from dahua_camera_master.browser.ie_browser_window import IEBrowserWindow
+from dahua_camera_master.utils.dpi_utils import set_dpi_awareness, setup_qt_dpi_settings
 
 
 class BrowserFactory:
@@ -96,7 +109,6 @@ def main_browser_standalone(default_url: str = "192.168.1.1") -> int:
     Returns:
         int: 应用程序退出码
     """
-    import sys
 
     try:
         app, window = create_browser_app(default_url)

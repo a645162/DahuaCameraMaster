@@ -3,8 +3,8 @@
 验证DPI工具模块是否正常工作
 """
 
-import sys
 import os
+import sys
 
 # 添加src目录到Python路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,10 +15,10 @@ if src_dir not in sys.path:
 
 # 现在可以导入DPI工具
 from dahua_camera_master.utils.dpi_utils import (
-    get_system_dpi,
-    get_dpi_scale_factor,
-    get_dpi_manager,
     configure_application_dpi,
+    get_dpi_manager,
+    get_dpi_scale_factor,
+    get_system_dpi,
 )
 
 

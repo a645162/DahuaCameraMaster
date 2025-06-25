@@ -3,9 +3,9 @@ IE浏览器窗口主模块
 重构后的IE浏览器窗口实现
 """
 
-import sys
-import os
 import logging
+import os
+import sys
 from typing import Optional
 
 # 添加src目录到Python路径，以便正确导入dahua_camera_master包
@@ -17,30 +17,30 @@ if __name__ == "__main__":
     src_dir = os.path.abspath(src_dir)
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
-from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QVBoxLayout,
-    QWidget,
-    QLineEdit,
-    QPushButton,
-    QHBoxLayout,
-    QStatusBar,
-    QProgressBar,
-    QMessageBox,
-    QLabel,
-)
 from PySide6.QtAxContainer import QAxWidget
 from PySide6.QtCore import Qt, QTimer
-
-from dahua_camera_master.utils.dpi_utils import (
-    set_dpi_awareness,
-    setup_qt_dpi_settings,
-    set_window_dpi,
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QStatusBar,
+    QVBoxLayout,
+    QWidget,
 )
+
 from dahua_camera_master.utils.browser_config import (
     BrowserConfigThread,
     BrowserConfigurationHelper,
+)
+from dahua_camera_master.utils.dpi_utils import (
+    set_dpi_awareness,
+    set_window_dpi,
+    setup_qt_dpi_settings,
 )
 
 

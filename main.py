@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 大华摄像机管理器 - 主启动文件
@@ -9,8 +8,8 @@ DahuaCameraMaster - Main Entry Point
 This is the external entry point that launches the internal main module in src directory.
 """
 
-import sys
 import os
+import sys
 
 
 def main():

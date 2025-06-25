@@ -4,8 +4,8 @@
 DPI相关功能已移至 dpi_utils.py 模块
 """
 
-import sys
 import ctypes
+import sys
 
 
 def is_admin() -> bool:

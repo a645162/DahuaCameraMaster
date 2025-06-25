@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 
 from PySide6 import QtCore, QtWidgets
 
 
-class Ui_InitDeviceDialog(object):
+class Ui_InitDeviceDialog:
     def setupUi(self, InitDeviceDialog):
         InitDeviceDialog.setObjectName("InitDeviceDialog")
         InitDeviceDialog.resize(450, 320)
@@ -50,7 +49,9 @@ class Ui_InitDeviceDialog(object):
         self.confirm_password_label = QtWidgets.QLabel("确认密码(Confirm Password):")
         self.account_layout.addWidget(self.confirm_password_label, 2, 0)
         self.confirm_password_lineEdit = QtWidgets.QLineEdit()
-        self.confirm_password_lineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+        self.confirm_password_lineEdit.setEchoMode(
+            QtWidgets.QLineEdit.EchoMode.Password
+        )
         self.confirm_password_lineEdit.setPlaceholderText("请再次输入密码")
         self.account_layout.addWidget(self.confirm_password_lineEdit, 2, 1)
 

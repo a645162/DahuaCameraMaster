@@ -4,11 +4,11 @@ DPI工具使用示例
 """
 
 from dahua_camera_master.utils.dpi_utils import (
+    DPIManager,
     configure_application_dpi,
     get_dpi_manager,
-    get_system_dpi,
     get_dpi_scale_factor,
-    DPIManager,
+    get_system_dpi,
 )
 
 
@@ -62,8 +62,8 @@ def example_qt_application():
 
     # 这是在创建QApplication之前应该做的事情
     from dahua_camera_master.utils.dpi_utils import (
-        setup_qt_dpi_settings,
         set_dpi_awareness,
+        setup_qt_dpi_settings,
     )
 
     # 1. 设置Qt环境变量

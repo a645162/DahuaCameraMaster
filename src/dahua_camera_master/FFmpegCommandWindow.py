@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 import os
 import sys
 from datetime import datetime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
 
 from FFmpegCommandUI import Ui_FFmpegWindow
+from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
 
 
 class FFmpegCommandWindow(QMainWindow, Ui_FFmpegWindow):
     def __init__(self, rtsp_url="", parent=None):
-        super(FFmpegCommandWindow, self).__init__(parent)
+        super.__init__(parent)
         self.setupUi(self)
 
         # 设置传入的RTSP URL

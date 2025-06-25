@@ -1,7 +1,7 @@
+import platform
 import subprocess as sp
 import time
 from typing import List, Optional
-import platform
 
 import numpy as np
 
@@ -25,12 +25,12 @@ class RtspPush:
     __open_have_error: bool = False
 
     def __init__(
-            self,
-            rtsp_url: str,
-            width: int = 1920,
-            height: int = 1080,
-            fps: float = 30,
-            interval: bool = True
+        self,
+        rtsp_url: str,
+        width: int = 1920,
+        height: int = 1080,
+        fps: float = 30,
+        interval: bool = True,
     ):
         self.__rtst_url = rtsp_url
 
@@ -135,27 +135,32 @@ class RtspPush:
 
     def set_encoder_cpu(self):
         self.__params_encoder = [
-            '-c:v', 'libx264',
-            '-preset', 'ultrafast',
+            "-c:v",
+            "libx264",
+            "-preset",
+            "ultrafast",
         ]
 
     def set_encoder_gpu_intel(self):
         self.__params_encoder = [
-            '-c:v', 'h264_qsv',
+            "-c:v",
+            "h264_qsv",
         ]
 
         self.update_command()
 
     def set_encoder_gpu_nvidia(self):
         self.__params_encoder = [
-            '-c:v', 'h264_nvenc',
+            "-c:v",
+            "h264_nvenc",
         ]
 
         self.update_command()
 
     def set_encoder_gpu_amd(self):
         self.__params_encoder = [
-            '-c:v', 'h264_amf',
+            "-c:v",
+            "h264_amf",
         ]
 
         self.update_command()
@@ -168,8 +173,10 @@ class RtspPush:
         rtsp_url = self.rtsp_url
 
         default_encoder = [
-            '-c:v', 'libx264',
-            '-preset', 'ultrafast',
+            "-c:v",
+            "libx264",
+            "-preset",
+            "ultrafast",
         ]
 
         params_encoder = self.__params_encoder.copy()
@@ -177,21 +184,28 @@ class RtspPush:
             params_encoder = default_encoder
 
         command = [
-            'ffmpeg',
-            '-y',  # 覆盖输出文件而不询问
-            '-f', 'rawvideo',
-            '-vcodec', 'rawvideo',
-            '-pix_fmt', 'bgr24',
-            '-s', "{}x{}".format(width, height),
-            '-r', str(fps),  # 帧率
-            '-i', '-',  # 输入来自标准输入
-
+            "ffmpeg",
+            "-y",  # 覆盖输出文件而不询问
+            "-f",
+            "rawvideo",
+            "-vcodec",
+            "rawvideo",
+            "-pix_fmt",
+            "bgr24",
+            "-s",
+            f"{width}x{height}",
+            "-r",
+            str(fps),  # 帧率
+            "-i",
+            "-",  # 输入来自标准输入
             *params_encoder,
-
-            '-pix_fmt', 'yuv420p',
-            '-rtsp_transport', 'tcp',
-            '-f', 'rtsp',
-            rtsp_url
+            "-pix_fmt",
+            "yuv420p",
+            "-rtsp_transport",
+            "tcp",
+            "-f",
+            "rtsp",
+            rtsp_url,
         ]
 
         self.__command = command

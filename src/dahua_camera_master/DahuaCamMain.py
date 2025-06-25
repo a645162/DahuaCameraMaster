@@ -1,52 +1,49 @@
-# coding=utf-8
-import sys
 import os
+import sys
 import time
+from ctypes import POINTER, c_char, cast, sizeof
 from datetime import datetime
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
-from PySide6.QtCore import QTimer, Signal, QDateTime, QDate, QTime, QSize
-from PySide6.QtGui import QPixmap
-from ctypes import sizeof, POINTER, cast, c_char
+
+from config_manager import ConfigManager
 
 # from ctypes import *
-
-
 from DahuaCamUI import Ui_MainWindow
-from config_manager import ConfigManager
 from NetSDK.NetSDK import NetClient
 from NetSDK.SDK_Callback import (
-    fDisConnect,
-    fHaveReConnect,
     CB_FUNCTYPE,
     fDecCBFun,
+    fDisConnect,
+    fHaveReConnect,
     fRealDataCallBackEx2,
 )
 from NetSDK.SDK_Enum import (
-    SDK_RealPlayType,
-    EM_LOGIN_SPAC_CAP_TYPE,
-    SDK_PTZ_ControlType,
     EM_DEV_CFG_TYPE,
+    EM_LOGIN_SPAC_CAP_TYPE,
     EM_REALDATA_FLAG,
     SDK_ALARM_TYPE,
+    SDK_PTZ_ControlType,
+    SDK_RealPlayType,
 )
 from NetSDK.SDK_Struct import (
-    C_LLONG,
-    NET_IN_LOGIN_WITH_HIGHLEVEL_SECURITY,
-    NET_OUT_LOGIN_WITH_HIGHLEVEL_SECURITY,
-    SNAP_PARAMS,
+    ALARM_MOTIONDETECT_INFO,
     C_DWORD,
     C_LDWORD,
-    c_ubyte,
-    c_uint,
+    C_LLONG,
+    LOG_SET_PRINT_INFO,
+    NET_IN_LOGIN_WITH_HIGHLEVEL_SECURITY,
+    NET_OUT_LOGIN_WITH_HIGHLEVEL_SECURITY,
+    NET_TIME,
+    SNAP_PARAMS,
     c_int,
     c_long,
-    NET_TIME,
-    LOG_SET_PRINT_INFO,
+    c_ubyte,
+    c_uint,
     sys_platform,
-    PLAY_FRAME_INFO,
-    ALARM_MOTIONDETECT_INFO,
 )
+from PySide6 import QtWidgets
+from PySide6.QtCore import QDate, QDateTime, QTime, QTimer, Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
 
 # 添加必要的路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -156,7 +153,7 @@ class DahuaCamWindow(QMainWindow, Ui_MainWindow):
     alarm_signal = Signal(int, object)  # 报警信号
 
     def __init__(self, parent=None):
-        super(DahuaCamWindow, self).__init__(parent)
+        super.__init__(parent)
         self.setupUi(self)
 
         # 设置全局窗口引用

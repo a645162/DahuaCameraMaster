@@ -1,45 +1,42 @@
-# -*- coding: utf-8 -*-
 
-import sys
-import time
 import socket
 import struct
-from queue import Queue
-from typing import List, Dict
+import sys
+import time
 
-from PySide6.QtCore import QThread, Signal
-from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QMessageBox,
-    QTableWidgetItem,
-    QDialog,
-    QPushButton,
-)
-from device_search_ui import Ui_DeviceSearchWindow
-from init_device_dialog_ui import Ui_InitDeviceDialog
+# from NetSDK.SDK_Callback import fSearchDevicesCBEx, fSearchDevicesCB
+from ctypes import POINTER, c_void_p, cast, sizeof
+from queue import Queue
+from typing import Dict, List
+
 from config_manager import ConfigManager
 from DahuaCamMain import DahuaCamWindow
+from device_search_ui import Ui_DeviceSearchWindow
+from init_device_dialog_ui import Ui_InitDeviceDialog
 from ip_config_window import IPConfigWindow
-
 from NetSDK.NetSDK import NetClient
-
 from NetSDK.SDK_Enum import EM_SEND_SEARCH_TYPE
 from NetSDK.SDK_Struct import (
     C_LLONG,
     CB_FUNCTYPE,
-    DEVICE_NET_INFO_EX,
-    DEVICE_NET_INFO_EX2,
-    NET_IN_STARTSERACH_DEVICE,
-    NET_OUT_STARTSERACH_DEVICE,
     DEVICE_IP_SEARCH_INFO,
     DEVICE_IP_SEARCH_INFO_IP,
+    DEVICE_NET_INFO_EX,
+    DEVICE_NET_INFO_EX2,
     NET_IN_INIT_DEVICE_ACCOUNT,
+    NET_IN_STARTSERACH_DEVICE,
     NET_OUT_INIT_DEVICE_ACCOUNT,
+    NET_OUT_STARTSERACH_DEVICE,
 )
-
-# from NetSDK.SDK_Callback import fSearchDevicesCBEx, fSearchDevicesCB
-from ctypes import POINTER, c_void_p, cast, sizeof
+from PySide6.QtCore import QThread, Signal
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QTableWidgetItem,
+)
 
 # from ctypes import *
 
@@ -552,14 +549,14 @@ class DeviceSearchWindow(QMainWindow, Ui_DeviceSearchWindow):
                 self.ip_config_window.raise_()
                 self.ip_config_window.activateWindow()
                 return
-            
+
             # 创建新的IP配置窗口
             self.ip_config_window = IPConfigWindow(self)
             self.ip_config_window.setWindowTitle("网卡IP配置工具")
             self.ip_config_window.show()
-            
+
             self.statusbar.showMessage("已打开网卡IP配置工具")
-            
+
         except Exception as e:
             QMessageBox.critical(self, "错误", f"打开IP配置工具失败: {str(e)}")
 

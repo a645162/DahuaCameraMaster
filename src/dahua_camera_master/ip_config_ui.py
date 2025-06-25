@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 
 from PySide6 import QtCore, QtWidgets
 
 
-class Ui_IPConfigWindow(object):
+class Ui_IPConfigWindow:
     def setupUi(self, IPConfigWindow):
         IPConfigWindow.setObjectName("IPConfigWindow")
         IPConfigWindow.resize(420, 480)
@@ -21,7 +20,9 @@ class Ui_IPConfigWindow(object):
         # 标题
         self.title_label = QtWidgets.QLabel("网卡IP配置工具")
         self.title_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2c3e50; padding: 8px;")
+        self.title_label.setStyleSheet(
+            "font-size: 14px; font-weight: bold; color: #2c3e50; padding: 8px;"
+        )
         self.title_label.setMaximumHeight(35)
         self.main_layout.addWidget(self.title_label)
 
@@ -30,15 +31,15 @@ class Ui_IPConfigWindow(object):
         self.adapter_groupBox.setMaximumHeight(80)
         self.adapter_layout = QtWidgets.QHBoxLayout(self.adapter_groupBox)
         self.adapter_layout.setSpacing(8)
-        
+
         self.adapter_comboBox = QtWidgets.QComboBox()
         self.adapter_comboBox.setMinimumHeight(28)
         self.adapter_layout.addWidget(self.adapter_comboBox)
-        
+
         self.refresh_adapter_button = QtWidgets.QPushButton("刷新")
         self.refresh_adapter_button.setFixedSize(60, 28)
         self.adapter_layout.addWidget(self.refresh_adapter_button)
-        
+
         self.main_layout.addWidget(self.adapter_groupBox)
 
         # IP配置区域
@@ -87,12 +88,14 @@ class Ui_IPConfigWindow(object):
         self.quick_groupBox.setMaximumHeight(60)
         self.quick_layout = QtWidgets.QHBoxLayout(self.quick_groupBox)
         self.quick_layout.setSpacing(8)
-        
+
         self.auto_ip_button = QtWidgets.QPushButton("自动分配IP (192.168.1.x)")
         self.auto_ip_button.setFixedHeight(30)
-        self.auto_ip_button.setStyleSheet("QPushButton { background-color: #3498db; color: white; border: none; border-radius: 3px; } QPushButton:hover { background-color: #2980b9; }")
+        self.auto_ip_button.setStyleSheet(
+            "QPushButton { background-color: #3498db; color: white; border: none; border-radius: 3px; } QPushButton:hover { background-color: #2980b9; }"
+        )
         self.quick_layout.addWidget(self.auto_ip_button)
-        
+
         self.main_layout.addWidget(self.quick_groupBox)
 
         # 添加弹性空间
@@ -104,17 +107,23 @@ class Ui_IPConfigWindow(object):
 
         self.apply_button = QtWidgets.QPushButton("应用配置")
         self.apply_button.setFixedHeight(35)
-        self.apply_button.setStyleSheet("QPushButton { background-color: #27ae60; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #229954; }")
+        self.apply_button.setStyleSheet(
+            "QPushButton { background-color: #27ae60; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #229954; }"
+        )
         self.button_layout.addWidget(self.apply_button)
 
         self.dhcp_button = QtWidgets.QPushButton("恢复DHCP")
         self.dhcp_button.setFixedHeight(35)
-        self.dhcp_button.setStyleSheet("QPushButton { background-color: #f39c12; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #e67e22; }")
+        self.dhcp_button.setStyleSheet(
+            "QPushButton { background-color: #f39c12; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #e67e22; }"
+        )
         self.button_layout.addWidget(self.dhcp_button)
 
         self.cancel_button = QtWidgets.QPushButton("取消")
         self.cancel_button.setFixedHeight(35)
-        self.cancel_button.setStyleSheet("QPushButton { background-color: #95a5a6; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #7f8c8d; }")
+        self.cancel_button.setStyleSheet(
+            "QPushButton { background-color: #95a5a6; color: white; border: none; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #7f8c8d; }"
+        )
         self.button_layout.addWidget(self.cancel_button)
 
         self.main_layout.addLayout(self.button_layout)
@@ -123,7 +132,9 @@ class Ui_IPConfigWindow(object):
         self.status_label = QtWidgets.QLabel("就绪")
         self.status_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.status_label.setFixedHeight(25)
-        self.status_label.setStyleSheet("color: #7f8c8d; font-style: italic; font-size: 11px; padding: 3px;")
+        self.status_label.setStyleSheet(
+            "color: #7f8c8d; font-style: italic; font-size: 11px; padding: 3px;"
+        )
         self.main_layout.addWidget(self.status_label)
 
         IPConfigWindow.setCentralWidget(self.centralwidget)

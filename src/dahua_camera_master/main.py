@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import sys
 import os
+import sys
 
 # 添加当前目录和父目录到Python路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -10,8 +9,8 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, current_dir)
 sys.path.insert(0, parent_dir)
 
-from PySide6.QtWidgets import QApplication
 from device_search_window import DeviceSearchWindow
+from PySide6.QtWidgets import QApplication
 
 
 def main():

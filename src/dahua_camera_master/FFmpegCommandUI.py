@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 
 from PySide6 import QtCore, QtWidgets
 
 
-class Ui_FFmpegWindow(object):
+class Ui_FFmpegWindow:
     def setupUi(self, FFmpegWindow):
         FFmpegWindow.setObjectName("FFmpegWindow")
         FFmpegWindow.resize(700, 600)

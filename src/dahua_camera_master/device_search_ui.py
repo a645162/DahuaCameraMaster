@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 
 from PySide6 import QtCore, QtWidgets
 
 
-class Ui_DeviceSearchWindow(object):
+class Ui_DeviceSearchWindow:
     def setupUi(self, DeviceSearchWindow):
         DeviceSearchWindow.setObjectName("DeviceSearchWindow")
         DeviceSearchWindow.resize(900, 700)
@@ -50,7 +49,9 @@ class Ui_DeviceSearchWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(80)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tableWidget.setSelectionBehavior(
+            QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows
+        )
         self.tableWidget.setAlternatingRowColors(True)
 
         self.devicelist_layout.addWidget(self.tableWidget)
@@ -139,7 +140,9 @@ class Ui_DeviceSearchWindow(object):
         # IP配置按钮
         self.IPConfigButton = QtWidgets.QPushButton("网卡IP配置(Network Config)")
         self.IPConfigButton.setMinimumHeight(40)
-        self.IPConfigButton.setStyleSheet("QPushButton { background-color: #e74c3c; color: white; font-weight: bold; border: none; border-radius: 3px; } QPushButton:hover { background-color: #c0392b; }")
+        self.IPConfigButton.setStyleSheet(
+            "QPushButton { background-color: #e74c3c; color: white; font-weight: bold; border: none; border-radius: 3px; } QPushButton:hover { background-color: #c0392b; }"
+        )
         self.operation_layout.addWidget(self.IPConfigButton)
 
         self.control_layout.addWidget(self.operation_groupBox)

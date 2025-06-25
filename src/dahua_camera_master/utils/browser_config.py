@@ -4,11 +4,12 @@
 """
 
 import logging
-from PySide6.QtCore import QThread, Signal
-from PySide6.QtAxContainer import QAxWidget
 
-from ..utils.system_utils import is_admin
+from PySide6.QtAxContainer import QAxWidget
+from PySide6.QtCore import QThread, Signal
+
 from ..utils.registry_utils import configure_ie_registry
+from ..utils.system_utils import is_admin
 
 
 class BrowserConfigThread(QThread):
@@ -124,10 +125,10 @@ class BrowserConfigurationHelper:
             script = """
             try {
                 window.onerror = function() { return true; };
-                window.addEventListener('error', function(e) { 
-                    e.preventDefault(); 
-                    e.stopPropagation(); 
-                    return false; 
+                window.addEventListener('error', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
                 }, true);
                 if (window.console) {
                     window.console.error = function() {};
@@ -155,13 +156,11 @@ class BrowserConfigurationHelper:
         window.onerror = function(msg, url, line, col, error) {
             return true; // 阻止默认错误处理
         };
-        
         window.addEventListener('error', function(e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         }, true);
-        
         // 禁用控制台错误
         if (window.console && window.console.error) {
             window.console.error = function() {};

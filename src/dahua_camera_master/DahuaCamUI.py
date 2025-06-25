@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 
-from PySide6 import QtCore, QtWidgets
 from AspectRatioVideoWidget import AspectRatioVideoWidget
+from PySide6 import QtCore, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow:
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1920, 1080)

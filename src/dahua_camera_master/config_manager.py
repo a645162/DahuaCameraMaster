@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 import json
 import os
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 
 class ConfigManager:
@@ -16,7 +15,7 @@ class ConfigManager:
         """从文件加载配置"""
         try:
             if os.path.exists(self.config_file):
-                with open(self.config_file, "r", encoding="utf-8") as f:
+                with open(self.config_file, encoding="utf-8") as f:
                     self.configs = json.load(f)
         except Exception as e:
             print(f"加载配置文件失败: {e}")

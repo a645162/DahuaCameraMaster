@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
 
+from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout,
-    QHBoxLayout,
     QComboBox,
     QFrame,
+    QHBoxLayout,
+    QLabel,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, QTimer, Signal
 
 
 class AspectRatioVideoWidget(QWidget):
