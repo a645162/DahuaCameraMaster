@@ -158,9 +158,7 @@ class IEComWidget(QWidget):
         """设置错误抑制"""
         try:
             self._error_suppression_timer = QTimer()
-            self._error_suppression_timer.timeout.connect(
-                self._inject_error_suppression
-            )
+            self._error_suppression_timer.timeout.connect(self._inject_error_suppression)
             self._error_suppression_timer.start(5000)  # 每5秒执行一次
         except Exception as e:
             self.logger.warning(f"设置错误抑制失败: {e}")
@@ -184,9 +182,7 @@ class IEComWidget(QWidget):
             pass
 
     # 事件处理方法
-    def _on_before_navigate(
-        self, disp, url, flags, target_frame, post_data, headers, cancel
-    ):
+    def _on_before_navigate(self, disp, url, flags, target_frame, post_data, headers, cancel):
         """导航开始前事件"""
         try:
             url_str = str(url) if url else ""
@@ -410,9 +406,7 @@ class IEComWidget(QWidget):
         try:
             document = self._browser.dynamicCall("Document")
             if document:
-                return document.dynamicCall(
-                    "execScript(QString,QString)", script, "JavaScript"
-                )
+                return document.dynamicCall("execScript(QString,QString)", script, "JavaScript")
         except Exception as e:
             self.logger.warning(f"执行脚本失败: {e}")
 
@@ -588,7 +582,6 @@ if __name__ == "__main__":
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
 
-    from PySide6.QtCore import Qt
     from PySide6.QtWidgets import (
         QApplication,
         QHBoxLayout,
@@ -599,8 +592,6 @@ if __name__ == "__main__":
         QVBoxLayout,
         QWidget,
     )
-
-    from dahua_camera_master.utils.dpi_utils import configure_application_dpi
 
     class IEComTestWindow(QMainWindow):
         """IE COM组件测试窗口"""
@@ -654,22 +645,12 @@ if __name__ == "__main__":
                 self.ie_widget = IEComWidget()
 
                 # 连接主要信号
-                self.ie_widget.navigation_started.connect(
-                    lambda url: print(f"🚀 开始导航: {url}")
-                )
-                self.ie_widget.navigation_completed.connect(
-                    lambda url: print(f"✅ 导航完成: {url}")
-                )
-                self.ie_widget.navigation_error.connect(
-                    lambda url, error: print(f"❌ 导航错误: {url} - {error}")
-                )
+                self.ie_widget.navigation_started.connect(lambda url: print(f"🚀 开始导航: {url}"))
+                self.ie_widget.navigation_completed.connect(lambda url: print(f"✅ 导航完成: {url}"))
+                self.ie_widget.navigation_error.connect(lambda url, error: print(f"❌ 导航错误: {url} - {error}"))
                 self.ie_widget.document_ready.connect(lambda: print("📄 文档就绪"))
-                self.ie_widget.progress_changed.connect(
-                    lambda progress: print(f"📊 加载进度: {progress}%")
-                )
-                self.ie_widget.title_changed.connect(
-                    lambda title: self.setWindowTitle(f"IE COM测试 - {title}")
-                )
+                self.ie_widget.progress_changed.connect(lambda progress: print(f"📊 加载进度: {progress}%"))
+                self.ie_widget.title_changed.connect(lambda title: self.setWindowTitle(f"IE COM测试 - {title}"))
 
                 # 添加到布局
                 self.centralWidget().layout().addWidget(self.ie_widget, 1)
@@ -723,12 +704,7 @@ if __name__ == "__main__":
         """主函数"""
         print("🚀 启动IE COM组件测试")
 
-        # 配置DPI
-        configure_application_dpi()
-
         app = QApplication(sys.argv)
-        app.setAttribute(Qt.AA_DisableHighDpiScaling, True)
-        app.setAttribute(Qt.AA_Use96Dpi, True)
 
         # 创建测试窗口
         window = IEComTestWindow()

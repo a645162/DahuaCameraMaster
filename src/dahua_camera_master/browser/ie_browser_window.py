@@ -3,6 +3,7 @@ IE浏览器窗口主模块
 重构后的IE浏览器窗口实现
 """
 
+import argparse
 import logging
 import os
 import sys
@@ -17,7 +18,6 @@ if __name__ == "__main__":
     src_dir = os.path.abspath(src_dir)
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
-from PySide6.QtAxContainer import QAxWidget
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QApplication,
@@ -33,13 +33,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from dahua_camera_master.utils.browser_config import (
-    BrowserConfigThread,
-    BrowserConfigurationHelper,
-)
+from dahua_camera_master.browser.ie_com_widget import IEComWidget
 from dahua_camera_master.utils.dpi_utils import (
     set_dpi_awareness,
-    set_window_dpi,
     setup_qt_dpi_settings,
 )
 
@@ -50,13 +46,10 @@ class IEBrowserWindow(QMainWindow):
     def __init__(self, default_url: str = ""):
         super().__init__()
         self.default_url = default_url
-        self.browser: Optional[QAxWidget] = None
+        self.browser: Optional[IEComWidget] = None
         self.url_input: Optional[QLineEdit] = None
         self.status_bar: Optional[QStatusBar] = None
         self.progress_bar: Optional[QProgressBar] = None
-        self.config_thread: Optional[BrowserConfigThread] = None
-        self.browser_config_helper: Optional[BrowserConfigurationHelper] = None
-        self.error_timer: Optional[QTimer] = None
 
         # 设置日志
         logging.basicConfig(
@@ -138,27 +131,20 @@ class IEBrowserWindow(QMainWindow):
         try:
             self._show_progress("正在初始化浏览器...")
 
-            # 创建浏览器组件
-            self.browser = QAxWidget("{8856F961-340A-11D0-A96B-00C04FD705A2}")
+            # 创建IE COM组件
+            self.browser = IEComWidget(self)
 
-            # 连接事件
-            if hasattr(self.browser, "exception"):
-                self.browser.exception.connect(self._handle_browser_exception)
+            # 连接信号
+            self.browser.navigation_started.connect(lambda url: self._show_progress(f"正在加载 {url}..."))
+            self.browser.navigation_completed.connect(lambda url: self._hide_progress("页面加载完成"))
+            self.browser.navigation_error.connect(self._on_navigation_error)
+            self.browser.document_ready.connect(lambda: self._hide_progress("文档加载完成"))
+            self.browser.progress_changed.connect(self._on_progress_changed)
+            self.browser.status_changed.connect(self._on_status_changed)
+            self.browser.title_changed.connect(self._on_title_changed)
 
             # 添加到布局
             self.centralWidget().layout().addWidget(self.browser, 1)
-
-            # 强制设置浏览器DPI
-            self._set_browser_dpi()
-
-            # 创建配置助手
-            self.browser_config_helper = BrowserConfigurationHelper(self.browser)
-
-            # 配置浏览器
-            self._configure_browser_sync()
-
-            # 异步配置注册表
-            self._configure_browser_async()
 
             # 延迟导航
             if self.default_url:
@@ -171,79 +157,27 @@ class IEBrowserWindow(QMainWindow):
             self.logger.error(f"浏览器初始化失败: {e}")
             self._show_error_message("初始化失败", f"无法创建IE浏览器组件:\n{str(e)}")
 
-    def _set_browser_dpi(self):
-        """设置浏览器组件DPI"""
-        try:
-            if self.browser and sys.platform == "win32":
-                # 获取浏览器控件的窗口句柄
-                hwnd = int(self.browser.winId())
-                if hwnd:
-                    set_window_dpi(hwnd)
+    def _on_navigation_error(self, url: str, error_msg: str):
+        """处理导航错误"""
+        self._hide_progress(f"导航失败: {error_msg}")
+        self.logger.error(f"导航错误: {url} - {error_msg}")
+        self._show_warning(f"无法访问 {url}: {error_msg}")
 
-        except Exception as e:
-            self.logger.warning(f"浏览器DPI设置失败: {e}")
+    def _on_progress_changed(self, progress: int):
+        """处理进度变化"""
+        if self.progress_bar.isVisible():
+            self.progress_bar.setRange(0, 100)
+            self.progress_bar.setValue(progress)
 
-    def _configure_browser_sync(self):
-        """同步配置浏览器属性"""
-        if not self.browser_config_helper:
-            return
+    def _on_status_changed(self, status: str):
+        """处理状态变化"""
+        if status and not self.progress_bar.isVisible():
+            self.status_bar.showMessage(status)
 
-        try:
-            success = self.browser_config_helper.configure_sync_properties()
-            if success:
-                # 连接文档完成事件
-                try:
-                    if hasattr(self.browser, "DocumentComplete"):
-                        self.browser.DocumentComplete.connect(
-                            self._on_document_complete
-                        )
-                    else:
-                        # 备用方法：设置定时器定期注入脚本
-                        self._setup_error_suppression_timer()
-                except Exception as e:
-                    self.logger.warning(f"连接文档完成事件失败: {e}")
-                    self._setup_error_suppression_timer()
-
-        except Exception as e:
-            self.logger.warning(f"浏览器同步配置失败: {e}")
-
-    def _setup_error_suppression_timer(self):
-        """设置错误抑制定时器"""
-        self.error_timer = QTimer()
-        self.error_timer.timeout.connect(self._inject_error_suppression)
-        self.error_timer.start(5000)  # 每5秒执行一次
-
-    def _inject_error_suppression(self):
-        """注入错误抑制脚本"""
-        if self.browser_config_helper:
-            self.browser_config_helper.inject_error_suppression_script()
-
-    def _configure_browser_async(self):
-        """异步配置浏览器注册表"""
-        if self.config_thread and self.config_thread.isRunning():
-            return
-
-        self.config_thread = BrowserConfigThread(self.browser)
-        self.config_thread.config_finished.connect(self._on_config_finished)
-        self.config_thread.start()
-
-    def _on_config_finished(self, success: bool, message: str):
-        """配置完成回调"""
-        self.logger.info(f"异步配置完成: {message}")
-
-    def _handle_browser_exception(self, code, source, desc, help_file):
-        """处理浏览器异常"""
-        self.logger.warning(f"浏览器异常已忽略: {desc}")
-
-    def _on_navigate_clicked(self):
-        """处理导航按钮点击"""
-        url = self.url_input.text().strip()
-        if not url:
-            self._show_warning("请输入有效的网址")
-            self.url_input.setFocus()
-            return
-
-        self._navigate_to_url(url)
+    def _on_title_changed(self, title: str):
+        """处理标题变化"""
+        if title:
+            self.setWindowTitle(f"IE浏览器 - {title}")
 
     def _navigate_to_url(self, url: str):
         """导航到指定URL"""
@@ -255,25 +189,24 @@ class IEBrowserWindow(QMainWindow):
         formatted_url = self._format_url(url)
         self.logger.info(f"导航到: {formatted_url}")
 
-        self._show_progress(f"正在加载 {formatted_url}...")
-
         # 更新地址栏
         if self.url_input.text() != formatted_url:
             self.url_input.setText(formatted_url)
 
-        try:
-            # 尝试导航
-            success = self._try_navigate(formatted_url)
+        # 使用IEComWidget的navigate方法
+        success = self.browser.navigate(formatted_url)
+        if not success:
+            self._show_warning("导航失败，请检查网络连接和URL格式")
 
-            if success:
-                QTimer.singleShot(3000, lambda: self._hide_progress("页面加载完成"))
-            else:
-                self._hide_progress("导航失败")
-                self._show_warning("无法访问该网址，请检查网络连接和URL格式")
+    def _on_navigate_clicked(self):
+        """处理导航按钮点击"""
+        url = self.url_input.text().strip()
+        if not url:
+            self._show_warning("请输入有效的网址")
+            self.url_input.setFocus()
+            return
 
-        except Exception as e:
-            self._hide_progress(f"导航失败: {str(e)}")
-            self.logger.error(f"导航失败: {e}")
+        self._navigate_to_url(url)
 
     def _format_url(self, url: str) -> str:
         """格式化URL"""
@@ -288,47 +221,15 @@ class IEBrowserWindow(QMainWindow):
 
         return url
 
-    def _try_navigate(self, url: str) -> bool:
-        """尝试多种导航方法"""
-        methods = [
-            lambda: self.browser.dynamicCall(
-                "Navigate2(QVariant,QVariant,QVariant,QVariant,QVariant)",
-                url,
-                0,
-                "",
-                "",
-                "",
-            ),
-            lambda: self.browser.dynamicCall("Navigate(QString)", url),
-            lambda: self._delayed_navigate(url),
-        ]
-
-        for i, method in enumerate(methods):
-            try:
-                method()
-                self.logger.info(f"导航方法 {i + 1} 成功")
-                return True
-            except Exception as e:
-                self.logger.warning(f"导航方法 {i + 1} 失败: {e}")
-
-        return False
-
-    def _delayed_navigate(self, url: str):
-        """延迟导航方法"""
-        self.browser.dynamicCall("Refresh()")
-        QTimer.singleShot(
-            500, lambda: self.browser.dynamicCall("Navigate(QString)", url)
-        )
-
     def _refresh_page(self):
         """刷新当前页面"""
         if self.browser:
-            try:
-                self.browser.dynamicCall("Refresh()")
+            success = self.browser.refresh()
+            if success:
                 self._show_progress("正在刷新...")
                 QTimer.singleShot(2000, lambda: self._hide_progress("刷新完成"))
-            except Exception as e:
-                self.logger.error(f"刷新失败: {e}")
+            else:
+                self._show_warning("刷新失败")
 
     def _show_progress(self, message: str):
         """显示进度"""
@@ -352,54 +253,51 @@ class IEBrowserWindow(QMainWindow):
 
     def closeEvent(self, event):
         """窗口关闭事件"""
-        if self.config_thread and self.config_thread.isRunning():
-            self.config_thread.quit()
-            self.config_thread.wait()
-
-        if self.error_timer:
-            self.error_timer.stop()
-
+        if self.browser:
+            self.browser.cleanup()
         event.accept()
-
-    def _on_document_complete(self, disp, url):
-        """文档加载完成事件处理"""
-        try:
-            if self.browser_config_helper:
-                script = self.browser_config_helper.get_document_complete_script()
-
-                # 尝试执行脚本
-                try:
-                    document = self.browser.dynamicCall("Document")
-                    if document:
-                        document.dynamicCall(
-                            "execScript(QString,QString)", script, "JavaScript"
-                        )
-                except Exception:
-                    pass
-
-        except Exception as e:
-            self.logger.warning(f"文档完成事件处理失败: {e}")
 
 
 def main():
     """主函数"""
-    # 在创建QApplication之前设置DPI
-    set_dpi_awareness()
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(
+        description="IE浏览器窗口",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+使用示例:
+  python ie_browser_window.py --url http://192.168.1.1
+  python ie_browser_window.py --url http://192.168.1.100 --low-dpi
+  python ie_browser_window.py --help
+        """,
+    )
 
-    # 设置Qt的高DPI设置
-    setup_qt_dpi_settings()
+    parser.add_argument("--url", default="192.168.1.1", help="默认加载的URL地址 (默认: 192.168.1.1)")
+
+    parser.add_argument("--low-dpi", action="store_true", help="使用低DPI模式（禁用高DPI缩放）")
+
+    args = parser.parse_args()
+
+    # 条件性设置DPI
+    if args.low_dpi:
+        # 在创建QApplication之前设置DPI
+        set_dpi_awareness()
+        # 设置Qt的高DPI设置
+        setup_qt_dpi_settings()
 
     app = QApplication(sys.argv)
 
-    # 禁用高DPI缩放
-    app.setAttribute(Qt.AA_DisableHighDpiScaling, True)
-    app.setAttribute(Qt.AA_Use96Dpi, True)
+    # 条件性应用DPI设置
+    if args.low_dpi:
+        # 禁用高DPI缩放
+        app.setAttribute(Qt.AA_DisableHighDpiScaling, True)
+        app.setAttribute(Qt.AA_Use96Dpi, True)
 
     app.setApplicationName("IE浏览器")
     app.setApplicationVersion("1.0")
 
-    # 创建并显示窗口
-    window = IEBrowserWindow("192.168.1.1")
+    # 创建并显示窗口，使用命令行指定的URL
+    window = IEBrowserWindow(args.url)
     window.show()
 
     return app.exec()
