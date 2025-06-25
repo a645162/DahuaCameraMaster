@@ -1,10 +1,14 @@
 [project]
-name = "dahuacameramaster"
+name = "DahuaCameraMaster"
 version = "0.1.0"
-description = "Add your description here"
+description = "A 3rd party Dahua camera management tool"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "netsdk",
     "pyside6>=6.9.1",
     "requests>=2.32.4",
 ]
+
+[tool.uv.sources]
+netsdk = { path = "../dist/NetSDK-2.0.0.1-py3-none-win_amd64.whl" }
