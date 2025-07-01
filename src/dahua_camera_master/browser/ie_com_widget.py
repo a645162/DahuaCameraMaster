@@ -1,6 +1,9 @@
 """
 IE COM组件封装类
 提供IE WebBrowser控件的完整功能封装
+
+相关资料：
+https://developer.aliyun.com/article/842942
 """
 
 import logging

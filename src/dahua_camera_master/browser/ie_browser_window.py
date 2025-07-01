@@ -278,6 +278,8 @@ def main():
 
     args = parser.parse_args()
 
+    # args.low_dpi = True
+
     # 条件性设置DPI
     if args.low_dpi:
         # 在创建QApplication之前设置DPI

@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBo
 
 class FFmpegCommandWindow(QMainWindow, Ui_FFmpegWindow):
     def __init__(self, rtsp_url="", parent=None):
-        super.__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
 
         # 设置传入的RTSP URL

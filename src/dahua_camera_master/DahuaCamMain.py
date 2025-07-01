@@ -153,7 +153,7 @@ class DahuaCamWindow(QMainWindow, Ui_MainWindow):
     alarm_signal = Signal(int, object)  # 报警信号
 
     def __init__(self, parent=None):
-        super.__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
 
         # 设置全局窗口引用
